@@ -15,12 +15,12 @@ public class Film {
 	private String rating;
 	private String special_features;
 	private List<Actor> laCast;
+	private String language;
 	
 
 	public Film(int id, String title, String description, String release_year, int language_id, int rental_duration,
 			double rental_rate, int length, double replacement_cost, String rating, String special_features,
 			List<Actor> laCast) {
-		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -34,12 +34,30 @@ public class Film {
 		this.special_features = special_features;
 		this.laCast = laCast;
 	}
+
+	public Film(int id, String title, String description, String release_year, int language_id, int rental_duration,
+			double rental_rate, int length, double replacement_cost, String rating, String special_features,
+			List<Actor> laCast, String language) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.release_year = release_year;
+		this.language_id = language_id;
+		this.rental_duration = rental_duration;
+		this.rental_rate = rental_rate;
+		this.length = length;
+		this.replacement_cost = replacement_cost;
+		this.rating = rating;
+		this.special_features = special_features;
+		this.laCast = laCast;
+		this.language = language;
+	}
 	@Override
 	public String toString() {
 		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", release_year=" + release_year
 				+ ", language_id=" + language_id + ", rental_duration=" + rental_duration + ", rental_rate="
 				+ rental_rate + ", length=" + length + ", replacement_cost=" + replacement_cost + ", rating=" + rating
-				+ ", special_features=" + special_features + ", laCast=" + laCast + "]";
+				+ ", special_features=" + special_features + ", laCast=" + laCast + ", language=" + language + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -48,6 +66,7 @@ public class Film {
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((laCast == null) ? 0 : laCast.hashCode());
+		result = prime * result + ((language == null) ? 0 : language.hashCode());
 		result = prime * result + language_id;
 		result = prime * result + length;
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
@@ -82,6 +101,11 @@ public class Film {
 			if (other.laCast != null)
 				return false;
 		} else if (!laCast.equals(other.laCast))
+			return false;
+		if (language == null) {
+			if (other.language != null)
+				return false;
+		} else if (!language.equals(other.language))
 			return false;
 		if (language_id != other.language_id)
 			return false;
@@ -188,6 +212,12 @@ public class Film {
 
 	public void setLaCast(List<Actor> laCast) {
 		this.laCast = laCast;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	
