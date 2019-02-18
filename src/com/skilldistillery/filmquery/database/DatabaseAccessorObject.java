@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
+import com.skilldistillery.filmquery.entities.Category;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.Inventory;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid?useSSL=false";
@@ -124,13 +126,43 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	}
 	
+	
+	@Override
+	public List<Category> findCategorybyFilmId(int filmId) {
+		List<Category> categories = new ArrayList<Category>();
+		String sql = "Select category.name from category Join film_category ON film_category.category_id=category.id JOIN film ON film_category.film_id=film.id where film.id=?";
+
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			// set parameter
+			ps.setInt(1, filmId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				categories.add(new Category( rs.getString("category.name")));
+			}
+
+			rs.close();
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+		return categories;
+
+	}
+	
 	//Select title, description, l.name  from film JOIN language l ON film.language_id=l.id WHERE title LIKE "%test%" OR description LIKE "%test%";
 	@Override
 	public List<Film> findfilmByKeyword(String keyword) throws SQLException {
 		List<Film> filmList = new ArrayList<Film>();
 
 		String sql = "SELECT film.id, title, description," + " release_year, language_id, rental_duration,"
-				+ " rental_rate,length, replacement_cost, rating, special_features, language.name  from film JOIN language ON language.id=film.language_id WHERE title LIKE ? OR description LIKE ?";
+				+ " rental_rate,length, replacement_cost, rating, special_features, language.name  from film JOIN language ON language.id=film.language_id WHERE title LIKE ? OR description LIKE ? ORDER BY title ASC";
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
@@ -146,7 +178,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				filmList.add(new Film(rs.getInt("id"), rs.getString("title"), rs.getString("description"),
 						rs.getString("release_year"), rs.getInt("language_id"), rs.getInt("rental_duration"),
 						rs.getDouble("rental_rate"), rs.getInt("length"), rs.getDouble("replacement_cost"),
-						rs.getString("rating"), rs.getString("special_features"), findActorsByFilmId(rs.getInt("id")),rs.getString("language.name")));
+						rs.getString("rating"), rs.getString("special_features"), findActorsByFilmId(rs.getInt("id")),rs.getString("language.name"), findCategorybyFilmId(rs.getInt("id"))));
 			}
 
 			rs.close();
@@ -157,6 +189,35 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			System.err.println(e);
 		}
 		return filmList;
+	}
+
+	@Override
+	public List<Inventory> getInventoryAndCondition(int filmId) {
+		List<Inventory> inventoryList = new ArrayList<Inventory>();
+
+		String sql = "SELECT film.title, media_condition, store_id FROM film JOIN inventory_item on film.id = film_id WHERE film.id = ? ORDER BY store_id ASC;";
+
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			PreparedStatement ps = conn.prepareStatement(sql);
+
+			// set parameter
+			ps.setInt(1,filmId);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				inventoryList.add(new Inventory(rs.getString("media_condition"), rs.getInt("store_id")));
+			}
+
+			rs.close();
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			System.out.println("Error in findfilmByKeyword " + e.getMessage());
+			System.err.println(e);
+		}
+		return inventoryList;
 	}
 
 }

@@ -16,7 +16,36 @@ public class Film {
 	private String special_features;
 	private List<Actor> laCast;
 	private String language;
+	private List<Category> category;
 	
+
+	public List<Category> getCategory() {
+		return category;
+	}
+
+	public void setCategory(List<Category> category) {
+		this.category = category;
+	}
+
+	public Film(int id, String title, String description, String release_year, int language_id, int rental_duration,
+			double rental_rate, int length, double replacement_cost, String rating, String special_features,
+			List<Actor> laCast, String language, List<Category> category) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.release_year = release_year;
+		this.language_id = language_id;
+		this.rental_duration = rental_duration;
+		this.rental_rate = rental_rate;
+		this.length = length;
+		this.replacement_cost = replacement_cost;
+		this.rating = rating;
+		this.special_features = special_features;
+		this.laCast = laCast;
+		this.language = language;
+		this.category = category;
+	}
 
 	public Film(int id, String title, String description, String release_year, int language_id, int rental_duration,
 			double rental_rate, int length, double replacement_cost, String rating, String special_features,
@@ -63,6 +92,7 @@ public class Film {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((laCast == null) ? 0 : laCast.hashCode());
@@ -90,6 +120,11 @@ public class Film {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
