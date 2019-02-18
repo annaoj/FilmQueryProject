@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Film {
@@ -242,7 +243,7 @@ public class Film {
 	}
 
 	public List<Actor> getLaCast() {
-		return laCast;
+		return this.laCast = new ArrayList<Actor>(laCast);
 	}
 
 	public void setLaCast(List<Actor> laCast) {

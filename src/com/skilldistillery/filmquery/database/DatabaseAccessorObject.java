@@ -24,15 +24,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			System.out.println("Exception" + e.getMessage());
 		}
 	}
-//
-//	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-//		System.out.println("CustomerLister started.");
-//
-//		DatabaseAccessorObject dataAccessObj = new DatabaseAccessorObject();
-////		System.out.println(dataAccessObj.findFilmById(2));
-////		System.out.println(dataAccessObj.findActorById(1));
-//		System.out.println(dataAccessObj.findfilmByKeyword("test"));
-//	}
 
 	@Override
 	public Film findFilmById(int filmId) throws SQLException {
